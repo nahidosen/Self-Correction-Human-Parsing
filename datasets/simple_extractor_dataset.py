@@ -32,11 +32,11 @@ class SimpleFolderDataset(data.Dataset):
     def __len__(self):
         return len(self.file_list)
 
-    def _box2cs(self, box):
+    def _box2cs(self, box):             # returns center and scale of image
         x, y, w, h = box[:4]
         return self._xywh2cs(x, y, w, h)
 
-    def _xywh2cs(self, x, y, w, h):
+    def _xywh2cs(self, x, y, w, h):     # returns center and scale of image
         center = np.zeros((2), dtype=np.float32)
         center[0] = x + w * 0.5
         center[1] = y + h * 0.5

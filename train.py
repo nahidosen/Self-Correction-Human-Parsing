@@ -76,15 +76,18 @@ def main():
     start_epoch = 0
     cycle_n = 0
 
+    # Logs
     if not os.path.exists(args.log_dir):
         os.makedirs(args.log_dir)
     with open(os.path.join(args.log_dir, 'args.json'), 'w') as opt_file:
         json.dump(vars(args), opt_file)
 
+    # GPU info
     gpus = [int(i) for i in args.gpu.split(',')]
     if not args.gpu == 'None':
         os.environ["CUDA_VISIBLE_DEVICES"] = args.gpu
 
+    # Input image size
     input_size = list(map(int, args.input_size.split(',')))
 
     cudnn.enabled = True
@@ -152,7 +155,8 @@ def main():
     # Optimizer Initialization
     optimizer = optim.SGD(model.parameters(), lr=args.learning_rate, momentum=args.momentum,
                           weight_decay=args.weight_decay)
-
+    
+    ##### Cyclical Learning Scheduler with Warm Restart
     lr_scheduler = SGDRScheduler(optimizer, total_epoch=args.epochs,
                                  eta_min=args.learning_rate / 100, warmup_epoch=10,
                                  start_cyclical=args.schp_start, cyclical_base_lr=args.learning_rate / 2,

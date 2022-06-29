@@ -27,7 +27,7 @@ affine_par = True
 pretrained_settings = {
     'resnet101': {
         'imagenet': {
-            'input_space': 'BGR',
+            'input_space': 'BGR',   
             'input_size': [3, 224, 224],
             'input_range': [0, 1],
             'mean': [0.406, 0.456, 0.485],

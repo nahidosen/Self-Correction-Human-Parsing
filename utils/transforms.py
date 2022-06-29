@@ -21,6 +21,8 @@ class BRG2Tensor_transform(object):
             return img
 
 class BGR2RGB_transform(object):
+    '''Inverses channel RGB to BGR ; BGR to RGB
+    '''
     def __call__(self, tensor):
         return tensor[[2,1,0],:,:]
 
@@ -81,6 +83,8 @@ def transform_parsing(pred, center, scale, width, height, input_size):
 def transform_logits(logits, center, scale, width, height, input_size):
 
     trans = get_affine_transform(center, scale, 0, input_size, inv=1)
+    # Affine transformation, all parallel lines in the original image will still be parallel in the output image
+    # https://www.geeksforgeeks.org/python-opencv-affine-transformation/
     channel = logits.shape[2]
     target_logits = []
     for i in range(channel):
@@ -100,7 +104,7 @@ def transform_logits(logits, center, scale, width, height, input_size):
 def get_affine_transform(center,
                          scale,
                          rot,
-                         output_size,
+                         output_size,   # 2D np
                          shift=np.array([0, 0], dtype=np.float32),
                          inv=0):
     if not isinstance(scale, np.ndarray) and not isinstance(scale, list):
